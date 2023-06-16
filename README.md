@@ -17,7 +17,7 @@
 | user_id  | bigint   |
 | title    | string   |
 | detail   | text     |
-| deadline | date     |
+| expired_at | date     |
 | priority | string   |
 | status   | string   |
 |created_at| timestamp|
