@@ -1,5 +1,30 @@
-<h2>タスク投稿確認</h2>
+<%= form_with(model: @task, url: tasks_path, local: true) do |form| %>
+  <h4 class="mb-3">確認画面</h4>
+  <p><strong>タスク名:&ensp;</strong>
+    <%= form.hidden_field :title %>
+    <%= @task.title %></p>
+  
+  <p><strong>詳細:&ensp;</strong>
+    <%= form.hidden_field :detail %>
+    <%= @task.detail %></p>
+  
+  <p><strong>終了期限:&ensp;</strong>
+    <%= form.hidden_field :expired_at %>
+    <%= l @task.expired_at, format: :date_only %></p>
+  
+  <p><strong>ステータス:&ensp;</strong>
+    <%= form.hidden_field :status %>
+    <%= @task.status_i18n %></p>
+  
+  <p><strong>優先度:&ensp;</strong>
+    <%= form.hidden_field :priority %>
+    <%= @task.priority_i18n %></p>
+  
+  <div class="mt-1">
+    <%= form.submit %>
+  </div>
 
-<%= render 'form' %>
-
-<p><%= link_to '戻る', tasks_path %></p>
+  <div class="mt-2">
+    <%= form.submit "戻る", name: "back" %>
+  </div>
+<% end %>

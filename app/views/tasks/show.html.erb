@@ -1,5 +1,10 @@
-<h1>タスクの詳細</h1>
+<h4 class="mb-3">タスク詳細</h4>
 
 <p>タスク名: <%= @task.title %></p>
 <p>詳細: <%= @task.detail %></p>
+<p>終了期限: <%= @task.expired_at %></p>
+<p>ステータス: <%= @task.status_i18n %></p>
+<p>優先順位: <%= @task.priority_i18n %></p>
 
+<%= link_to "詳細", edit_task_path(@task.id) %> 
+<%= link_to "戻る", tasks_path %> 
