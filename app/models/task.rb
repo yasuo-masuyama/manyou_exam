@@ -10,4 +10,6 @@ class Task < ApplicationRecord
   scope :by_priority, -> { order(priority: :asc) }
   scope :search_word, ->(search) { where("title LIKE ?", "%#{search}%") }
   scope :search_status, ->(status) { where(status: status) }
+
+  belongs_to :user
 end
