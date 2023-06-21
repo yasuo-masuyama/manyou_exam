@@ -8,22 +8,10 @@ class User < ApplicationRecord
   
   has_many :tasks, dependent: :destroy
 
-  before_update :unable_update_admin
-  before_update :unable_destroy_admin
-
   private
 
-  def unable_update_admin
-    @admin = User.where(admin: true)
-    if @admin.count == 1 && self.admin == false
-      throw :abort
-    end
-  end
+  before_destroy { throw(:abort) if User.where(admin: true).count <= 1 && self.admin? }
+  before_update { throw(:abort) if User.where(admin: true).count <= 1 && self.admin? }
 
-  def unable_destroy_admin
-    @admin = User.where(admin: true)
-    if @admin.count == 1 && self.admin == true
-      throw :abort
-    end
-  end
+
 end
