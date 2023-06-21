@@ -1,5 +1,6 @@
 class Admin::UsersController < ApplicationController
   before_action :set_user, only: %i[ edit update show destroy ]
+  before_action :admin?
 
   def index
     @users = User.all.includes(:tasks)
@@ -45,5 +46,12 @@ class Admin::UsersController < ApplicationController
 
   def set_user
     @user = User.find(params[:id])
+  end
+
+  def admin?
+    unless current_user.admin?
+      redirect_to tasks_path
+      flash[:notice] = "管理者権限がありません"
+    end
   end
 end
