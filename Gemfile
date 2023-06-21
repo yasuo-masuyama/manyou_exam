@@ -14,6 +14,9 @@ gem 'bootsnap', '>= 1.4.4', require: false
 gem 'kaminari'
 gem 'enum_help'
 gem 'bcrypt'
+gem 'net-smtp'
+gem 'net-imap'
+gem 'net-pop'
 
 
 group :development, :test do
