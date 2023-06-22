@@ -3,7 +3,6 @@
     <div id="error_explanation">
       <h2><%= @task.errors.count %>件のエラーがあるよ</h2>
       <ul>
-
       <% @task.errors.full_messages.each do |msg| %>
         <li><%= msg %></li>
       <% end %>
@@ -25,6 +24,12 @@
     
     <div class="mt-3"><%= form.label :priority %></div>
     <%= form.select :priority, Task.priorities.keys.map {|k| [I18n.t("enums.task.priority.#{k}"), k]} %>
+
+    <div class="mt-3"><%= form.label :label %></div>
+      <% Label.all.each do |label| %>
+        <%= form.check_box :label_ids, { multiple: true, disabled: label[:disabled], include_hidden: false }, label[:id] %>
+        <%= form.label :label_ids, label.name, value: label[:id] %>
+    <% end %>
 
   <div class="mt-3"><%= form.submit %></div>
 <% end %>

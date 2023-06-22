@@ -5,5 +5,10 @@
 <p><strong>終了期限:&ensp;</strong><%= l @task.expired_at, format: :date_only %></p>
 <p><strong>ステータス:&ensp;</strong><%= @task.status %></p>
 <p><strong>優先度:&ensp;</strong><%= @task.priority %></p>
+<p><strong>ラベル:&ensp;</strong>
+  <% @task.labels.each do |label| %>
+    <span class ="badge bg-secondary text-light m-1"><%= label.name %></span>
+  <% end %>
+</p>
 
 <p><%= link_to '戻る', tasks_path %></p>
