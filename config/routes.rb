@@ -10,5 +10,6 @@ Rails.application.routes.draw do
   end
   namespace :admin do
     resources :users
+    resources :labels, except: :show
   end
 end
