@@ -17,6 +17,9 @@ gem 'bcrypt'
 gem 'net-smtp'
 gem 'net-imap'
 gem 'net-pop'
+gem 'faker'
+gem 'bootstrap', '~> 4.4.1'
+gem 'jquery-rails'
 
 
 group :development, :test do
@@ -27,7 +30,6 @@ group :development, :test do
   gem 'pry-byebug'
   gem 'launchy'
   gem 'webdrivers'
-  gem 'faker'
   gem 'spring-commands-rspec'
 end
 
