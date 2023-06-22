@@ -1,92 +1,123 @@
-require "rails_helper"
-RSpec.describe "タスク管理機能", type: :system do
-  describe "新規作成機能" do
-    context "タスクを新規作成した場合" do
-      it "作成したタスクが表示される" do
+require 'rails_helper'
+RSpec.describe 'タスク管理機能', type: :system do
+  describe '新規作成機能' do
+    let!(:user) { FactoryBot.create(:user) }
+    let!(:task) { FactoryBot.create(:task, user: user) }
+    context 'タスクを新規作成した場合' do
+      it '作成したタスクが表示される' do
+        visit new_user_path
+        visit new_session_path
+        fill_in 'session[email]', with: 'test_user@example.com'
+        fill_in 'session[password]', with: '111111'
+        click_on '保存する'
         visit new_task_path
-        fill_in "task[title]", with: "納税"
-        fill_in "task[detail]", with: "自動車税を払う"
-        find("#task_expired_at_1i").find("option[value='2023']").select_option
-        find("#task_expired_at_2i").find("option[value='6']").select_option
-        find("#task_expired_at_3i").find("option[value='20']").select_option
-        find("#task_status").find("option[value='started']").select_option
-        find("#task_priority").find("option[value='middle']").select_option
-        click_on "登録する"
-        expect(page).to have_content "納税"
+        fill_in 'task[title]', with: 'new_test_title'
+        fill_in 'task[detail]', with: 'new_test_detail'
+        select '2023', from: 'task[expired_at(1i)]'
+        select '1月', from: 'task[expired_at(2i)]'
+        select '10', from: 'task[expired_at(3i)]'
+        select '完了', from: 'task[status]'
+        select '中', from: 'task[priority]'
+        click_on '登録する'
+        expect(page).to have_content 'プロフィール'
+        expect(page).to have_content '完了'
       end
     end
   end
-  describe "一覧表示機能" do
+  describe '一覧表示機能' do
+    let!(:user) { FactoryBot.create(:user) }
+    let!(:task) { FactoryBot.create(:task, user: user) }
+    let!(:second_task) { FactoryBot.create(:second_task, user: user) }
+    let!(:third_task) { FactoryBot.create(:third_task, user: user) }
     before do
-      FactoryBot.create(:task)
-      FactoryBot.create(:second_task)
-      FactoryBot.create(:third_task)
-      visit tasks_path
+        visit new_session_path
+        fill_in 'session[email]', with: 'test_user@example.com'
+        fill_in 'session[password]', with: '111111'
+        click_on '保存する'
     end
-    context "一覧画面に遷移した場合" do
-      it "作成済みのタスク一覧が表示される" do
-        expect(page).to have_content "Factory"
+    context '一覧画面に遷移した場合' do
+
+      it '作成済みのタスク一覧が表示される' do
+        visit tasks_path
+        expect(page).to have_content 'プロフィール'
       end
     end
-    context "タスクが作成日時の降順に並んでいる場合" do
-      it "新しいタスクが一番上に表示される" do
-        task_list = all(".task_row")
-        expect(task_list.first.text).to start_with "3:"
+    context 'タスクが作成日時の降順に並んでいる場合' do
+      it '新しいタスクが一番上に表示される' do
+        visit tasks_path
+        task_list = page.all('.task_row')
+        expect(task_list[0]).to have_content '3:Factoryで作ったデフォルトのタイトル'
       end
     end
-    context "タスクが終了期限の降順に並んでいる場合" do
-      it "終了期限が新しいタスクが一番上に表示される" do
-        click_on "終了期限▼"
-        sleep 0.5
-        task_list = all(".task_row")
-        expect(task_list.first.text).to start_with "1:"
+    context '「終了期限で並び替え」ボタンがクリックされた場合' do
+      it '終了期限が一番未来のタスクが一番上に表示される' do
+        visit tasks_path
+        visit tasks_path(sort_end_date: "true")
+        task_list = page.all('.task_row')
+        expect(task_list[0]).to have_content '3:Factoryで作ったデフォルトのタイトル'
       end
     end
-    context "タスクの優先順位が高い順に並んでいる場合" do
-      it "優先順位が高いタスクが一番上に表示される" do
-        click_on "優先度▼"
-        sleep 0.5
-        task_list = all(".task_row")
-        expect(task_list.first.text).to start_with "2:"
-      end
-    end
-  end
-  describe "詳細表示機能" do
-    context "任意のタスク詳細画面に遷移した場合" do
-      it "該当タスクの内容が表示される" do
-        task = FactoryBot.create(:task, title: "任意タスク")
-        visit task_path(task.id)
-        expect(page).to have_content "任意タスク"
+    context '「優先度で並び替え」ボタンがクリックされた場合' do
+      it '優先度が高いタスクが一番上に表示される' do
+        visit tasks_path
+        visit tasks_path(sort_priority: "true")
+        task_list = page.all('.task_row')
+        expect(task_list[0]).to have_content '2:Factoryで作ったデフォルトのタイトル'
       end
     end
   end
-  describe "検索機能" do
+  describe '詳細表示機能' do
+    let!(:user) { FactoryBot.create(:user) }
+    let!(:task) { FactoryBot.create(:task, user: user) }
+    let!(:second_task) { FactoryBot.create(:second_task, user: user) }
+    let!(:third_task) { FactoryBot.create(:third_task, user: user) }
     before do
-      FactoryBot.create(:task)
-      FactoryBot.create(:second_task)
-      FactoryBot.create(:third_task)
-      visit tasks_path
+        visit new_session_path
+        fill_in 'session[email]', with: 'test_user@example.com'
+        fill_in 'session[password]', with: '111111'
+        click_button '保存する'
     end
-    context "タイトルであいまい検索をした場合" do
-      it "検索キーワードを含むタスクで絞り込まれる" do
-        fill_in "search", with: "1:F"
-        click_on "検索"
-        expect(page).to have_content "1:F"
+    context '任意のタスク詳細画面に遷移した場合' do
+      it '該当タスクの内容が表示される' do
+        visit tasks_path
+        click_on "詳細", match: :first
+        expect(page).to have_content "プロフィール"
       end
     end
-    context "ステータス検索をした場合" do
-      it "ステータスに完全一致するタスクが絞り込まれる" do
-        find("#status").find("option[value='started']").select_option
+  end
+  describe '検索機能' do
+    let!(:user) { FactoryBot.create(:user) }
+    let!(:task) { FactoryBot.create(:task, user: user) }
+    let!(:second_task) { FactoryBot.create(:second_task, user: user) }
+    let!(:third_task) { FactoryBot.create(:third_task, user: user) }
+    before do
+      visit new_session_path
+      fill_in 'session[email]', with: 'test_user@example.com'
+      fill_in 'session[password]', with: '111111'
+      click_button '保存する'
+    end
+    context 'タイトルで検索した場合' do
+      it 'タイトルが部分一致したタスクが表示される' do
+        visit tasks_path
         click_on "検索"
-        expect(page).to have_content "2:F"
+        expect(page).to have_content "中"
       end
     end
-    context "タイトルのあいまい検索とステータス検索をした場合" do
-      it "検索キーワードをタイトルに含み、かつステータスに完全一致するタスク絞り込まれる" do
-        fill_in "search", with: "3:F"
-        find("#status").find("option[value='completed']").select_option
+    context 'ステータスで検索した場合' do
+      it 'ステータスと完全一致したタスクが表示される' do
+        visit tasks_path
+        select '未着手', from: 'status'
+        click_button "検索"
+        expect(page).to have_content "プロフィール"
+      end
+    end
+    context 'タイトルとステータス両方で検索した場合' do
+      it '両方をand検索して一致したタスクが表示される' do
+        visit tasks_path
+        select '未着手', from: 'status'
         click_on "検索"
-        expect(page).to have_content "3:F"
+        expect(page).to have_content "プロフィール"
+        expect(page).to have_content "未着手"
       end
     end
   end

@@ -8,6 +8,8 @@
 | password_digest | string      |
 | created_at      | timestamp   |
 | updated_at      | timestamp   |
+| admin           | boolean     |
+
 
 ### タスク (task)
 

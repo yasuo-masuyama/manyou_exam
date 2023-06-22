@@ -1,0 +1,28 @@
+<h2>アカウントを作成する</h2>
+
+<% if @user.errors.any? %>
+  <div id="error_explanation">
+    <h2><%= pluralize(@user.errors.count, "つのエラー") %>があって<%= @user.name %>が登録できませんでした。</h2>
+    <ul>
+    <% @user.errors.full_messages.each do |message| %>
+      <li><%= message %></li>
+    <% end %>
+    </ul>
+  </div>
+<% end %>
+
+<%= form_with(model: @user, local: true) do |form| %>  
+  <%= form.label :name %>
+  <%= form.text_field :name %>
+
+  <%= form.label :email %>
+  <%= form.email_field :email %>
+
+  <%= form.label :password %>
+  <%= form.password_field :password %>
+
+  <%= form.label :password_confirmation %>
+  <%= form.password_field :password_confirmation %>
+
+  <%= form.submit %>
+<% end %>

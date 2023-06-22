@@ -19,13 +19,15 @@ RSpec.describe "タスクモデル機能", type: :model do
   end
   context "タスクのタイトルと詳細に内容が記載されている場合" do
     it "バリデーションが通る" do
-      task = Task.new(title: "タイトル合格", detail: "詳細合格")
+      user = User.new
+      task = Task.new(title: "タイトル", detail: "詳細", user: user)
       expect(task).to be_valid
     end
   end
   describe "検索機能" do
-    let!(:task) { FactoryBot.create(:task, title: "task") }
-    let!(:second_task) { FactoryBot.create(:second_task, title: "sample") }
+    let!(:user) { FactoryBot.create(:user) }
+    let!(:task) { FactoryBot.create(:task, title: "task", user: user) }
+    let!(:second_task) { FactoryBot.create(:second_task, title: "sample", user: user) }
     context "scopeメソッドでタイトルのあいまい検索をした場合" do
       it "検索キーワードを含むタスクが絞り込まれる" do
         expect(Task.search_word("task")).to include(task)

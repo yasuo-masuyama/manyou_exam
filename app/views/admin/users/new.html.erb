@@ -1,0 +1,35 @@
+<h2>管理者専用画面</h2>
+
+<h3>ユーザー新規作成</h3>
+
+<% if @user.errors.any? %>
+  <div id="error_explanation">
+    <h2><%= pluralize(@user.errors.count, "error") %> prohibited this <%= @user.name %> from being saved:</h2>
+    <ul>
+    <% @user.errors.full_messages.each do |message| %>
+      <li><%= message %></li>
+    <% end %>
+    </ul>
+  </div>
+<% end %>
+
+<%= form_with(model: @user, local:true, url:admin_users_path) do |form| %>
+
+  <%= form.label :name %>
+  <%= form.text_field :name %>
+
+  <%= form.label :email %>
+  <%= form.email_field :email %>
+
+  <%= form.label :password %>
+  <%= form.password_field :password %>
+
+  <%= form.label :password_confirmation %>
+  <%= form.password_field :password_confirmation %>
+
+  <%= form.label :admin %>
+  <%= form.check_box :admin, {} , true, false %>
+
+  <%= form.submit %>
+  
+<% end %>
