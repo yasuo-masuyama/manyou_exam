@@ -21,6 +21,6 @@ User.all.each do |user|
   end
 end
 
-2.upto(10) { |id| Label.create!(id: id, name: Faker::Games::Pokemon.name) }
+10.times do { |id| Label.create!(id: id, name: Faker::Games::Pokemon.name) }
 
-Task.all.each { |task| task.labellings.create!(task_id: task, label_id: rand(3..10))}
+Task.all.each { |task| task.labellings.create!(task_id: task, label_id: rand(1..10))}
