@@ -3,6 +3,7 @@
 <%= form_with url: tasks_path, method: :get, local: true do |form| %>
   タスク名<%= form.text_field :search, placeholder: "検索" %>
   ステータス<%= form.select :status, options_for_select([["指定なし", ""]].concat(Task.statuses.map { |k, v| [I18n.t("enums.task.status.#{k}"), k] })), {} %>
+  ラベル<%= form.select("label_id", Label.pluck(:name, :id), { include_blank: true }) %></span>
   <%= form.submit '検索', name: nil %>
 <% end %>
 </div>
@@ -18,6 +19,7 @@
       <th class="col-1">作成者</th>
       <th class="col-1">ステータス</th>
       <th class="col-1"><%= link_to "優先度▼", tasks_path(sort_priority: "true") %></th>
+      <th class="col-1">ラベル</th>
       <th class="col-2" colspan="3"></th>
     </tr>
   </thead>
@@ -30,6 +32,11 @@
         <td><%= task.user.name %></td>
         <td><%= task.status %></td>
         <td><%= task.priority %></td>
+        <td>
+        <% task.labels.each do |label| %>
+          <span class ="badge bg-secondary text-light m-1"><%= label.name %></span>
+        <% end %>
+        </td>
         <td><%= link_to '詳細', task_path(task.id), type: "button", class: "btn btn-outline-primary btn-sm" %></td>
         <td><%= link_to '編集', edit_task_path(task.id), type: "button", class: "btn btn-outline-success btn-sm" %></td>
         <td><%= link_to '削除', task_path(task.id), method: :delete, data: { confirm: '本当に削除しますか?' }, type: "button", class: "btn btn-outline-danger btn-sm" %></td>

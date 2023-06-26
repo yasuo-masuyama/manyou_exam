@@ -19,6 +19,13 @@
   <p><strong>優先度:&ensp;</strong>
     <%= form.hidden_field :priority %>
     <%= @task.priority_i18n %></p>
+
+  <p><strong>ラベル:&ensp;</strong>
+    <% @task.labels.each do |label| %>
+    <%= form.hidden_field :label_ids, multiple: true, value: label.id %>
+    <span class ="badge bg-secondary text-light m-1"><%= label.name %></span>
+    <% end %>
+  </p>
   
   <div class="mt-1">
     <%= form.submit %>

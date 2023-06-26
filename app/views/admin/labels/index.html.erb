@@ -1,0 +1,22 @@
+<h3>ラベル一覧</h3>
+
+<div><%= link_to 'ラベル新規登録', new_admin_label_path, type: "button", class: "btn btn-primary mb-3" %></div>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th class="col-6">ラベル名</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @labels.each do |label| %>
+      <tr>
+        <td><%= label.name %></td>
+        <td><%= link_to '編集', edit_admin_label_path(label.id), type: "button", class: "btn btn-outline-success btn-sm" %></td>
+        <td><%= link_to '削除', admin_label_path(label.id), method: :delete, data: { confirm: '本当に削除しますか?' }, type: "button", class: "btn btn-outline-danger btn-sm" %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<p class="mt-3"><%= link_to '戻る', admin_users_path %></p
