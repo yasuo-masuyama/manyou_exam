@@ -63,7 +63,6 @@ RSpec.describe "ユーザー管理機能", type: :system do
       FactoryBot.create(:second_user)
       FactoryBot.create(:admin_user1)
       FactoryBot.create(:admin_user2)
-
     end
     context "管理画面に遷移" do
       it "管理ユーザは管理画面にアクセスできる" do

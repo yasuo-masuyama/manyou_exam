@@ -37,7 +37,6 @@ RSpec.describe 'タスク管理機能', type: :system do
         click_on '保存する'
     end
     context '一覧画面に遷移した場合' do
-
       it '作成済みのタスク一覧が表示される' do
         visit tasks_path
         expect(page).to have_content 'プロフィール'
