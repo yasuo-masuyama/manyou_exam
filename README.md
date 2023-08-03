@@ -62,3 +62,5 @@
    $git push heroku main
 8. DBのマイグレート
    $heroku run rails db:migrate
+
+### 追加
